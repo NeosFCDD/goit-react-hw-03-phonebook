@@ -10,6 +10,25 @@ class App extends Component {
     filter: "",
   };
 
+  componentDidMount() {
+    if (localStorage.getItem("contacts")) {
+      let contactsList = [];
+      try {
+        contactsList = JSON.parse(localStorage.getItem("contacts"));
+      } catch (error) {
+        console.log(error);
+      }
+      this.setState({ contacts: contactsList });
+    }
+  }
+
+  componentDidUpdate(prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem("contacts", JSON.stringify(this.state.contacts));
+    }
+  }
+  
+  
   handleSubmit = ({ name, number }) => {
     this.state.contacts.some((contact) => contact.name.toLowerCase() === name.toLowerCase())
       ? alert(name + " is already in your contacts.")
